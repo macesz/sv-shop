@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SV-Shop</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <h1>Sv-Shop</h1>
+    <select name="sort" id="sortBy" onchange="listProducts()">
+        <option value="">--Sort by:--</option>
+        <option value="byName">by name</option>
+        <option value="byPrice">by price</option>
+    </select>
+    <input id="search" type="text" placeholder="search">
+
+    <div id="container">
+        <ul id="productsList">
+            <!-- <li>
+            <div id="productName">name</div>
+            <div id="productPrice">price</div>
+        </li> -->
+        </ul>
+    </div>
+
+    <button onclick="buyItem()">buy</button>
+
+
+
+
+    <script src="script.js" async defer></script>
+    <script src="products.js" async defer></script>
+</body>
+
+</html>
