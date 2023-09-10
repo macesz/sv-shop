@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path')
 const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -11,6 +12,9 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(cookieParser("secret"));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/pages'));
 
 // define the routes of static 
 app.use(express.static('static'))
@@ -29,9 +33,10 @@ app.get('/products', (req, res) => {
     res.sendFile(__dirname + '/pages/products.html')
 })
 
-app.get('/product', (req, res) => {
-    res.sendFile(__dirname + '/pages/product.html')
-})
+// app.get('/product', (req, res) => {
+//     // res.sendFile(__dirname + '/pages/product.html')
+//     res.render("product", { productName: "dsdsd" })
+// })
 
 app.get('/buy', (req, res) => {
     res.sendFile(__dirname + '/pages/buy.html')
@@ -156,12 +161,18 @@ const creatProducts = async () => {
 // })
 
 app.get('/product/:id', async (req, res) => {
+    console.log(req.params.id)
 
-    productData = await productModel.find({ _id: req.params.id })
+    let productId = new db.Types.ObjectId(req.params.id)
 
-    console.log(productData)
+    let productData = await productModel.findById(productId)
+
 
     res.json(productData)
+
+    // res.render("product", {
+    //     productName: "Hello" /// productData.productName
+    // })
 })
 
 app.post('/getProduct', async (req, res) => {
