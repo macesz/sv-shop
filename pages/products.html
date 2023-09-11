@@ -13,12 +13,14 @@
 
 <body>
     <h1>Sv-Shop</h1>
+    <!-- we made here a select tag with an onchange 
+    methode that will call the listProducts() and give us the sorted list   -->
     <select name="sort" id="sortBy" onchange="listProducts()">
         <option value="">--Sort by:--</option>
         <option value="byName">by name</option>
         <option value="byPrice">by price</option>
     </select>
-    <input id="search" type="text" placeholder="search">
+    <input id="search" type="search" placeholder="search">
 
     <div id="container">
         <!-- <ul id="productsList"> -->

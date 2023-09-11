@@ -1,5 +1,7 @@
 
+
 const listProducts = () => {
+
 
     let sortBy = document.getElementById('sortBy').value;
 
@@ -24,6 +26,31 @@ const listProducts = () => {
 
 }
 
+const addToOrder = (productName, productPrice) => {
+    // let userName = document.getElementById('userName');
+    // let productName = document.getElementsByClassName('productName');
+    // let productPrice = document.getElementsByClassName('productPrice');
+
+    fetch('/addToOrder', {
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        method: 'post',
+        body: JSON.stringify({
+            userEmail: logedUser.userEmail,
+            productName: productName,
+            price: productPrice
+        })
+    })
+        .then(res => res.json())
+        .then((data) => {
+
+            alert(data)
+
+        }).catch((err) => {
+            console.log(err);
+        })
+
+}
+
 const renderProducts = (data) => {
     //Find the container where we attach everything to
     let productsDiv = document.querySelector('#container');
@@ -40,25 +67,38 @@ const renderProducts = (data) => {
 
         const productLi = document.createElement('li');
         const productNameDiv = document.createElement('div');
-        const productLink = document.createElement("a")
+        const productElement = document.createElement("p")
         const productPriceDiv = document.createElement('div');
 
         //Add appropriate classes and ids. Grab data and insert if needed.
         productLi.className = 'productLi'
+        // event listener for click event to select product
+        productLi.addEventListener("click", function () {
+            // alert("You clicked the white element!" + data[i].productName);
+
+            // creat session storage to store the selected product
+            addToOrder(data[i].productName, data[i].productPrice)
+        }, false);
+
         productNameDiv.className = 'productName'
         productPriceDiv.className = 'productPrice'
-
+        productElement.className = "productElement"
         //Grab data and insert it into created elements
-        productLink.innerText = data[i].productName
-        productLink.setAttribute("href", "product/" + data[i]._id)
+        productElement.innerText = data[i].productName
+        // productLink.setAttribute("href", "product/" + data[i]._id)
         productPriceDiv.innerText = data[i].productPrice
 
+
+
         //Append everything to main container
-        productNameDiv.appendChild(productLink)
+        productNameDiv.appendChild(productElement)
         productLi.appendChild(productNameDiv)
         productLi.appendChild(productPriceDiv)
 
         productList.appendChild(productLi)
+
+
+
     }
 }
 

@@ -33,10 +33,6 @@ app.get('/products', (req, res) => {
     res.sendFile(__dirname + '/pages/products.html')
 })
 
-// app.get('/product', (req, res) => {
-//     // res.sendFile(__dirname + '/pages/product.html')
-//     res.render("product", { productName: "dsdsd" })
-// })
 
 app.get('/buy', (req, res) => {
     res.sendFile(__dirname + '/pages/buy.html')
@@ -67,7 +63,7 @@ const regvalidate = async (tempUser) => {
     if (result != null) {
         return "user is already exsist"
     }
-    // return empty error msg
+    // return empty msg
     return ""
 }
 
@@ -160,20 +156,6 @@ const creatProducts = async () => {
 //     res.json('products add succsesfully')
 // })
 
-app.get('/product/:id', async (req, res) => {
-    console.log(req.params.id)
-
-    let productId = new db.Types.ObjectId(req.params.id)
-
-    let productData = await productModel.findById(productId)
-
-
-    res.json(productData)
-
-    // res.render("product", {
-    //     productName: "Hello" /// productData.productName
-    // })
-})
 
 app.post('/getProduct', async (req, res) => {
     let sortBy = null
@@ -189,7 +171,7 @@ app.post('/getProduct', async (req, res) => {
     // here we creat a promise to find the products
     let find = productModel.find()
 
-    console.log(sortBy);
+    // console.log(sortBy);
     // if we got a sort request we run a sort function on our results
     if (sortBy != null) {
         find = find.sort(sortBy)
@@ -199,6 +181,31 @@ app.post('/getProduct', async (req, res) => {
     result = await find
 
     res.json(result)
+})
+
+// schema for pending orders
+
+const orderSchema = new db.Schema({
+    userName: String,
+    productName: String,
+    productPrice: Number,
+})
+
+//pending order's collection
+
+const orderModel = db.model('orders', orderSchema)
+
+app.post('/addToOrder', async (req, res) => {
+
+    let temp = {
+        userEmail: req.body.userEmail,
+        productName: req.body.productName,
+        productPrice: req.body.price
+    }
+
+    await orderModel.insertMany(temp)
+
+    res.json('product add succsesfully to the pending order collections')
 })
 
 

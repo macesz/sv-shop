@@ -77,7 +77,7 @@ const validate = (userName, userEmail, userPassword) => {
     span.idName = "errmsg";
 
     // check username, and if not correct insert a dom err message
-    if (userName.length < 4 || userName.length > 8) {
+    if (userName.length < 2 || userName.length > 8) {
         span.innerHTML = 'User name must be between 4-8 character long!!!';
         divFromHtml.append(span);
 
