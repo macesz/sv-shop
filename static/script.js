@@ -1,3 +1,11 @@
+function delete_cookie(name, path, domain) {
+    if (getCookie(name)) {
+        document.cookie = name + "=" +
+            ((path) ? ";path=" + path : "") +
+            ((domain) ? ";domain=" + domain : "") +
+            ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    }
+}
 // func to get a specific value from cookie by name
 function getCookie(name) {
     // need to get a cookie string that is after "; {name}=" and before next ";". Before we do any processing, 

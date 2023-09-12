@@ -15,11 +15,12 @@
     <h1>Sv-Shop</h1>
     <!-- we made here a select tag with an onchange 
     methode that will call the listProducts() and give us the sorted list   -->
-    <select name="sort" id="sortBy" onchange="listProducts()">
+    <select name="sort" id="sortBy">
         <option value="">--Sort by:--</option>
         <option value="byName">by name</option>
         <option value="byPrice">by price</option>
     </select>
+    <button onclick="listProducts()">Sort</button>
     <input id="search" type="search" placeholder="search">
 
     <div id="container">
@@ -31,7 +32,7 @@
         <!-- </ul> -->
     </div>
 
-    <button onclick="buyItem()">buy</button>
+    <button onclick="gotoByItem()">buy</button>
 
 
 

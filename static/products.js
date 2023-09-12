@@ -26,30 +26,7 @@ const listProducts = () => {
 
 }
 
-const addToOrder = (productName, productPrice) => {
-    // let userName = document.getElementById('userName');
-    // let productName = document.getElementsByClassName('productName');
-    // let productPrice = document.getElementsByClassName('productPrice');
 
-    fetch('/addToOrder', {
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        method: 'post',
-        body: JSON.stringify({
-            userEmail: logedUser.userEmail,
-            productName: productName,
-            price: productPrice
-        })
-    })
-        .then(res => res.json())
-        .then((data) => {
-
-            alert(data)
-
-        }).catch((err) => {
-            console.log(err);
-        })
-
-}
 
 const renderProducts = (data) => {
     //Find the container where we attach everything to
@@ -75,9 +52,31 @@ const renderProducts = (data) => {
         // event listener for click event to select product
         productLi.addEventListener("click", function () {
             // alert("You clicked the white element!" + data[i].productName);
+            // creat variable to store sessionStorage items for our cart
+            let cart = sessionStorage.getItem("cart");
+            // if the cart is empty creat a new array
+            if (cart == null || cart == "") {
+                cart = []
+            } else {
+                // else if i already have items i got as a Json string I need to 
+                // destringify|parse the cart elements to convert from Json string to an array
+                cart = JSON.parse(cart) // "[{}]"
+            }
 
-            // creat session storage to store the selected product
-            addToOrder(data[i].productName, data[i].productPrice)
+            // creat a variable for the carItem object
+            let cartItem = {
+                productName: data[i].productName,
+                productPrice: data[i].productPrice
+            }
+            // pusch cartItem to cart
+            cart.push(cartItem)
+            //Save data to sessionStorage and stringify convert from array to a json string
+            // 
+            sessionStorage.setItem("cart", JSON.stringify(cart))
+
+            console.log(cart);
+
+            // addToOrder(data[i].productName, data[i].productPrice)
         }, false);
 
         productNameDiv.className = 'productName'
@@ -85,6 +84,7 @@ const renderProducts = (data) => {
         productElement.className = "productElement"
         //Grab data and insert it into created elements
         productElement.innerText = data[i].productName
+
         // productLink.setAttribute("href", "product/" + data[i]._id)
         productPriceDiv.innerText = data[i].productPrice
 
@@ -98,8 +98,11 @@ const renderProducts = (data) => {
         productList.appendChild(productLi)
 
 
-
     }
+}
+
+const gotoByItem = () => {
+    window.location = '/buy'
 }
 
 // call function to list the products wehn the page loaded

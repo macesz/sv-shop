@@ -186,21 +186,22 @@ app.post('/getProduct', async (req, res) => {
 // schema for pending orders
 
 const orderSchema = new db.Schema({
-    userName: String,
-    productName: String,
-    productPrice: Number,
+    userEmail: String,
+    cart: [{
+        productName: String,
+        productPrice: Number,
+    }]
 })
 
 //pending order's collection
 
 const orderModel = db.model('orders', orderSchema)
 
-app.post('/addToOrder', async (req, res) => {
+app.post('/buy', async (req, res) => {
 
     let temp = {
         userEmail: req.body.userEmail,
-        productName: req.body.productName,
-        productPrice: req.body.price
+        cart: req.body.cart
     }
 
     await orderModel.insertMany(temp)
