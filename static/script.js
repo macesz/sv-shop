@@ -1,3 +1,4 @@
+// dlete cookies function
 function delete_cookie(name, path, domain) {
     if (getCookie(name)) {
         document.cookie = name + "=" +
@@ -44,11 +45,14 @@ if (decodeURIComponent(getCookie("userEmail")) != "") {
     }
 }
 
+// Fuction for signing in
 const signIn = () => {
 
+    // get the values from the form and store in a variable
     let userEmail = document.getElementById('userEmail').value;
     let userPassword = document.getElementById('userPassword').value;
 
+    // use fetch to comunicate with the database
     fetch('/check', {
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         method: 'post',
@@ -61,11 +65,12 @@ const signIn = () => {
     })
         .then(res => res.json())
         .then((data) => {
+            // if the data is not in the database return with an error
             if (data == null) {
                 alert("user not found")
                 return false
             }
-
+            // if the user was found redirect to the products page
             document.location = "/products"
 
         }).catch((err) => {
@@ -92,6 +97,7 @@ const validate = (userName, userEmail, userPassword) => {
         return false;
     }
 
+    // check email, and if not correct insert a dom err message
     if (userEmail.indexOf('@') == -1) {
 
         span.innerHTML = 'Must conatin @';
@@ -99,7 +105,7 @@ const validate = (userName, userEmail, userPassword) => {
 
         return false;
     }
-
+    // check password, and if not correct insert a dom err message
     if (userPassword.length < 5 || userPassword.length > 10 || userPassword.indexOf('$') == -1) {
 
         span.innerHTML = 'Password name must be between 5-10 character long and must conatin $ character';
@@ -128,6 +134,7 @@ const signUp = () => {
         return false
     }
 
+    // fetch all the data from the user to the  database
     fetch('/reg', {
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         method: 'post',
@@ -140,6 +147,7 @@ const signUp = () => {
         .then(res => res.json())
         .then((data) => {
             if (data.success) {
+                // if sucsess redirect to index page to sign in 
                 window.location = "/"
             } else {
                 alert(data.error)

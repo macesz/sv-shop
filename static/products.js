@@ -1,23 +1,22 @@
 
 
 const listProducts = () => {
-
-
+    // get the selected input value from the select tag
     let sortBy = document.getElementById('sortBy').value;
 
+    // fetch to get all the datas from the database
     fetch('/getProduct', {
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         method: 'post',
         body: JSON.stringify({
             sortBy: sortBy,
-            //     searchKey: searchText
 
         })
 
     })
         .then(res => res.json())
         .then((data) => {
-            // call the renderProducts function with param data
+            // call the renderProducts function with the datas from the database
             renderProducts(data)
 
         }).catch((err) => {
@@ -51,7 +50,7 @@ const renderProducts = (data) => {
         productLi.className = 'productLi'
         // event listener for click event to select product
         productLi.addEventListener("click", function () {
-            // alert("You clicked the white element!" + data[i].productName);
+
             // creat variable to store sessionStorage items for our cart
             let cart = sessionStorage.getItem("cart");
             // if the cart is empty creat a new array
@@ -59,7 +58,7 @@ const renderProducts = (data) => {
                 cart = []
             } else {
                 // else if i already have items i got as a Json string I need to 
-                // destringify|parse the cart elements to convert from Json string to an array
+                // 'destringify' =>parse the cart elements to convert the Json string to an array
                 cart = JSON.parse(cart) // "[{}]"
             }
 
@@ -84,23 +83,17 @@ const renderProducts = (data) => {
         productElement.className = "productElement"
         //Grab data and insert it into created elements
         productElement.innerText = data[i].productName
-
-        // productLink.setAttribute("href", "product/" + data[i]._id)
         productPriceDiv.innerText = data[i].productPrice
-
-
 
         //Append everything to main container
         productNameDiv.appendChild(productElement)
         productLi.appendChild(productNameDiv)
         productLi.appendChild(productPriceDiv)
-
         productList.appendChild(productLi)
-
-
     }
 }
 
+// function to simpli redirect to the buy webpage
 const gotoByItem = () => {
     window.location = '/buy'
 }

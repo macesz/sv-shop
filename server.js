@@ -9,7 +9,7 @@ const url = 'mongodb+srv://orshi:Lunatik14@cluster0.u5mgtyy.mongodb.net/svShop'
 const port = 3000;
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 app.use(cookieParser("secret"));
 
@@ -50,7 +50,7 @@ const userScema = new db.Schema({
     userPassword: String
 })
 
-//modell, collection for users
+//modell | collection for users
 
 const userModel = db.model('users', userScema)
 
@@ -187,16 +187,18 @@ app.post('/getProduct', async (req, res) => {
 
 const orderSchema = new db.Schema({
     userEmail: String,
+    // as we have an array of products the client selected i used arra as the type of the Schema 
     cart: [{
         productName: String,
         productPrice: Number,
     }]
 })
 
-//pending order's collection
+//pending order's collection 
 
 const orderModel = db.model('orders', orderSchema)
 
+// create database
 app.post('/buy', async (req, res) => {
 
     let temp = {
