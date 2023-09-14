@@ -92,7 +92,6 @@ app.post('/reg', async (req, res) => {
         //response to the client with fail 
         res.json({
             error: error,
-            success: false,
         })
         return
     }
@@ -102,7 +101,6 @@ app.post('/reg', async (req, res) => {
     //response to the client with succsess 
     res.json({
         error: null,
-        success: true,
     })
 })
 

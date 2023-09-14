@@ -146,8 +146,10 @@ const signUp = () => {
     })
         .then(res => res.json())
         .then((data) => {
-            if (data.success) {
-                // if sucsess redirect to index page to sign in 
+            // data.error is from the server validation 
+
+            if (data.error == null) {
+                // if user add succsesfully  redirect to index page to sign in 
                 window.location = "/"
             } else {
                 alert(data.error)
