@@ -38,6 +38,9 @@ app.get('/buy', (req, res) => {
     res.sendFile(__dirname + '/pages/buy.html')
 })
 
+app.get('/all', (req, res) => {
+    res.sendFile(__dirname + '/pages/allOrders.html')
+})
 
 db.connect(url).then(() => console.log('db-on!'))
 
@@ -86,7 +89,7 @@ app.post('/reg', async (req, res) => {
     // if the reg validteate func return with an error msg 
 
     if (error != "") {
-        //response to the client with succsess 
+        //response to the client with fail 
         res.json({
             error: error,
             success: false,
@@ -120,6 +123,28 @@ app.post('/check', async (req, res) => {
     }
 
     res.json(result)
+})
+
+app.get('/all', (req, res) => {
+    if (req.cookies.userEmail == "lacka@rege.hu") {
+        res.sendFile(__dirname + '/pages/allProducts.html')
+    } else {
+        res.status(400).send('access denied!!!')
+
+    }
+
+})
+
+app.get('/getAllOrders', async (req, res) => {
+    // if (req.cookies.userEmail == "lacka@rege.hu") {
+    //     res.status(400).send('access denied!!!')
+    //     return
+    // }
+
+    let result = await orderModel.find()
+
+    res.json(result)
+
 })
 
 // schema for products
@@ -168,17 +193,21 @@ app.post('/getProduct', async (req, res) => {
         sortBy = { productPrice: 1 }
     }
 
-    // here we creat a promise to find the products
-    let find = productModel.find()
+    // here we creat a promise to find the products 
+    // "^" search with the given letters in the beginning of the word
+    let re = RegExp("^" + req.body.searchBy)
+    // ({ productName: re }) here I give a paramatater to the find function for the search
+    // if there is nothink is the searach bar than i get all
+    let found = productModel.find({ productName: re })
 
     // console.log(sortBy);
     // if we got a sort request we run a sort function on our results
     if (sortBy != null) {
-        find = find.sort(sortBy)
+        found = found.sort(sortBy)
     }
 
-    // in order the get the results we waiting for the "find" promise
-    result = await find
+    // in order the get the results we waiting for the "found" promise
+    result = await found
 
     res.json(result)
 })

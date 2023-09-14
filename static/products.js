@@ -3,6 +3,7 @@
 const listProducts = () => {
     // get the selected input value from the select tag
     let sortBy = document.getElementById('sortBy').value;
+    let searchBy = document.getElementById('searchBar').value;
 
     // fetch to get all the datas from the database
     fetch('/getProduct', {
@@ -10,13 +11,14 @@ const listProducts = () => {
         method: 'post',
         body: JSON.stringify({
             sortBy: sortBy,
-
+            searchBy: searchBy
         })
 
     })
         .then(res => res.json())
         .then((data) => {
             // call the renderProducts function with the datas from the database
+            // console.log(data);
             renderProducts(data)
 
         }).catch((err) => {
@@ -25,7 +27,9 @@ const listProducts = () => {
 
 }
 
-
+document.getElementById('searchBar').addEventListener('keyup', () => {
+    listProducts()
+})
 
 const renderProducts = (data) => {
     //Find the container where we attach everything to
@@ -86,7 +90,7 @@ const renderProducts = (data) => {
         productPriceDiv.innerText = data[i].productPrice
 
         //Append everything to main container
-        productNameDiv.appendChild(productElement)
+        productNameDiv.appendChild(productElement) //
         productLi.appendChild(productNameDiv)
         productLi.appendChild(productPriceDiv)
         productList.appendChild(productLi)

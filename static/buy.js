@@ -32,7 +32,7 @@ const buyItem = () => {
 // the approve function 
 const approve = () => {
 
-    // get the store datas and store in a variable "cart"
+    // get the stored datas from sessionStorage and store in a variable "cart"
     let cart = getCart()
 
     // fetch the datas to the databaes
