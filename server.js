@@ -1,5 +1,5 @@
 const express = require('express');
-const path = require('path')
+// const path = require('path')
 const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -13,8 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 app.use(cookieParser("secret"));
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '/pages'));
+// app.set('views', path.join(__dirname, '/pages'));
 
 // define the routes of static 
 app.use(express.static('static'))
@@ -59,7 +58,7 @@ const userModel = db.model('users', userScema)
 
 // regvalidate is an async func where we check the 
 // email in the database and the db call is always an async func
-const regvalidate = async (tempUser) => {
+const regValidate = async (tempUser) => {
     let result = await userModel.findOne({ userEmail: tempUser.userEmail })
 
     // if we can find a document with the email address  then return with an error msg
@@ -84,14 +83,13 @@ app.post('/reg', async (req, res) => {
     }
 
     // we call our validation function to know if the email adress is registered
-    let error = await regvalidate(tempUser)
+    let error = await regValidate(tempUser)
 
     // if the reg validteate func return with an error msg 
-
     if (error != "") {
         //response to the client with fail 
         res.json({
-            error: error,
+            error: error
         })
         return
     }
@@ -100,7 +98,7 @@ app.post('/reg', async (req, res) => {
 
     //response to the client with succsess 
     res.json({
-        error: null,
+        error: null
     })
 })
 
@@ -134,10 +132,10 @@ app.get('/all', (req, res) => {
 })
 
 app.get('/getAllOrders', async (req, res) => {
-    // if (req.cookies.userEmail == "lacka@rege.hu") {
-    //     res.status(400).send('access denied!!!')
-    //     return
-    // }
+    if (req.cookies.userEmail == "lacka@rege.hu") {
+        res.status(400).send('access denied!!!')
+        return
+    }
 
     let result = await orderModel.find()
 
@@ -184,10 +182,16 @@ app.post('/getProduct', async (req, res) => {
     let sortBy = null
     // console.log(req.body);
     // here I want to know if we got a sort request and if it's by name or price
+    // The parameter contains a field: value pair that defines the sort 
+    // order of the result set. The value is 1 or -1 that specifies an ascending 
+    // or descending sort respectively. The type of parameter is a document.
+
+
     if (req.body.sortBy == "byName") {
         sortBy = { productName: 1 }
     }
     if (req.body.sortBy == "byPrice") {
+
         sortBy = { productPrice: 1 }
     }
 
@@ -195,7 +199,7 @@ app.post('/getProduct', async (req, res) => {
     // "^" search with the given letters in the beginning of the word
     let re = RegExp("^" + req.body.searchBy)
     // ({ productName: re }) here I give a paramatater to the find function for the search
-    // if there is nothink is the searach bar than i get all
+    // if there is nothing in the searach bar than i get all
     let found = productModel.find({ productName: re })
 
     // console.log(sortBy);
